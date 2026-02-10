@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will you be my Valentine?</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #ffe6f0, #ff99cc);
+        }
+
+        h1 {
+            margin-top: 20px;
+            color: #ff0066;
+            font-size: clamp(24px, 5vw, 40px);
+        }
+
+        #gif {
+            width: 80%;
+            max-width: 350px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: clamp(16px, 4vw, 22px);
+            cursor: pointer;
+            border: none;
+            border-radius: 20px;
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+
+        #yesBtn {
+            background-color: #ff4d88;
+            color: white;
+            left: 30%;
+            top: 75%;
+        }
+
+        #noBtn {
+            background-color: #666;
+            color: white;
+            left: 55%;
+            top: 75%;
+        }
+
+        .heart {
+            position: fixed;
+            top: -10px;
+            font-size: 24px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }}
+
+        #loveText {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: clamp(30px, 8vw, 70px);
+            color: #ff0066;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 0, 102, 0.6);
+            opacity: 0;
+            transition: all 0.6s ease;
+            z-index: 1000;
+
+
+        }
+
+    </style>
+</head>
+<body>
+
+<h1 id="question">Will you be my valentine? 💕</h1>
+<div id="loveText">Love you honey 💖</div>
+<img id="gif" src="{{ url_for('static', filename='миньон-14-февраля.gif') }}">
+
+<button class="btn" id="yesBtn" onclick="yesClicked()">Yes 💖</button>
+<button class="btn" id="noBtn" onclick="moveNo()" ontouchstart="moveNo()">No 😢</button>
+
+<script>
+    let yesScale = 1;
+    let noScale = 1;
+
+    function moveNo() {
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+
+
+        const maxX = window.innerWidth - noBtn.offsetWidth;
+        const maxY = window.innerHeight - noBtn.offsetHeight;
+
+        noBtn.style.left = Math.random() * maxX + "px";
+        noBtn.style.top = Math.random() * maxY + "px";
+
+
+        yesScale *= 1.25;
+        yesBtn.style.transform = "scale(" + yesScale + ")";
+
+
+        noScale *= 0.85;
+        noBtn.style.transform = "scale(" + noScale + ")";
+    }
+
+    function yesClicked() {
+    document.getElementById("gif").src =
+        "{{ url_for('static', filename='love-you-bear.gif') }}";
+
+    document.getElementById("question").innerText =
+        "Yea!!!!!! 💘💘💘";
+
+    document.getElementById("yesBtn").style.display = "none";
+    document.getElementById("noBtn").style.display = "none";
+
+    startHearts();
+    launchConfetti();
+
+
+    const loveText = document.getElementById("loveText");
+    loveText.style.transform = "translate(-50%, -50%) scale(1)";
+    loveText.style.opacity = "1";
+}
+
+
+    function startHearts() {
+        setInterval(() => {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "❤️";
+
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+            heart.style.fontSize = (Math.random() * 20 + 20) + "px";
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }, 150);
+    }
+
+    function launchConfetti() {
+        confetti({
+            particleCount: 200,
+            spread: 100,
+            origin: { y: 0.6 }
+        });
+    }
+</script>
+
+</body>
+</html>
+
